@@ -7,7 +7,7 @@ char recommencer(char message[]) {
     char recommencer;
     
     do {
-        printf(YELLOW "\n\n%s (O/N) : " RESET, message);
+        printf(YELLOW "\n%s (O/N) : " RESET, message);
         scanf(" %c", &recommencer);
     } while (recommencer != 'O' && recommencer != 'N');
 

@@ -133,7 +133,9 @@ void readContact(Collection collection)
 
     for (int i = 0; i < collection->size; i++)
     {
-        displaySingleContact(collection->contacts[i]);
+        if (collection->contacts[i].id != 0) {
+            displaySingleContact(collection->contacts[i]);
+        }
 
         if (i != collection->size - 1) {
             printf(GREEN "\n===================\n" RESET);
@@ -179,15 +181,51 @@ void updateContact(Collection collection)
         {
             printf(RED "Aucun contact ne correspond à votre recherche (%s)!" RESET, name);
         }
-    } while (recommencer("Voulez-vous relancer la rechercher ?") == 'O');
+    } while (recommencer("Voulez-vous relancer la modification ?") == 'O');
     
 }
 
 void deleteContact(Collection collection)
 {
+    char name[255];
+    int found;
+
     if (hasContact(collection, "supprimer") == 1) {
         return;
     }
+
+    do
+    {
+        system("clear");
+        printf(YELLOW "Option : Supprimer un contact \n" RESET);
+        printf("vous faites une recherche sur %d contacts\n\n", collection->size);
+
+        printf("Nom du contact à supprimer : ");
+        scanf("%s", name);
+
+        found = 0;
+
+        for (int i = 0; i < collection->size; i++)
+        {
+            if (strcmp(name, collection->contacts[i].name) == 0) {
+                printf(GREEN "Contact trouvé \n" RESET);
+                displaySingleContact(collection->contacts[i]);
+
+                for (int j = i - 1; j < collection->size - 1; j++)
+                {  
+                    collection->contacts[i] = collection->contacts[i+1]; 
+                }
+
+                printf(GREEN "Contact supprimé avec succès ! \n" RESET);
+                found++;
+            }
+        }
+
+        if (found == 0)
+        {
+            printf(RED "Aucun contact ne correspond à votre recherche (%s)!" RESET, name);
+        }
+    } while (recommencer("Voulez-vous relancer la suppression ?") == 'O');
 }
 
 void searchContact(Collection collection)
