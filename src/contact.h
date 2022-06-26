@@ -20,10 +20,15 @@ int menu();
 Collection initializeCollection();
 Collection createCollection(int size);
 
+// operations sur un contact
+void displaySingleContact(contact contact);
+void createSingleContact(Collection collection);
+void updateSingleContact(Contact contact);
+
+// operations sur l'ensemble de contact
 int hasContact(Collection collection, char message[]);
 void createContact(Collection collection);
 void readContact(Collection collection);
-void displaySingleContact(contact contact);
 void updateContact(Collection collection);
 void deleteContact(Collection collection);
 void searchContact(Collection collection);

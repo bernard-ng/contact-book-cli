@@ -68,6 +68,38 @@ int hasContact(Collection collection, char message[])
     return 0;
 }
 
+void displaySingleContact(contact contact)
+{
+    printf("Id : %d \n", contact.id);
+    printf("Nom : %s \n", contact.name);
+    printf("Prenom : %s \n", contact.surname);
+    printf("Numéro : %s \n", contact.number);
+}
+
+void createSingleContact(Collection collection)
+{
+    printf("(%d) Entrez le nom : ", collection->current + 1);
+    scanf("%s", collection->contacts[collection->current].name);
+
+    printf("(%d) Entrez le prenom : ", collection->current + 1);
+    scanf("%s", collection->contacts[collection->current].surname);
+
+    printf("(%d) Entrez le numéro : ", collection->current + 1);
+    scanf("%s", collection->contacts[collection->current].number);
+}
+
+void updateSingleContact(Contact contact)
+{
+    printf("Entrez le nouveau nom : ");
+    scanf("%s", contact->name);
+
+    printf("Entrez le nouveau prenom : ");
+    scanf("%s", contact->surname);
+
+    printf("Entrez le nouveau numéro : ");
+    scanf("%s", contact->number);
+}
+
 void createContact(Collection collection) 
 {
     system("clear");
@@ -78,30 +110,15 @@ void createContact(Collection collection)
     {
         collection->current = i;
         collection->contacts[i].id = i + 1;
-
-        printf("(%d) Entrez le nom : ", collection->current + 1);
-        scanf("%s", collection->contacts[i].name);
-
-        printf("(%d) Entrez le prenom : ", collection->current + 1);
-        scanf("%s", collection->contacts[i].surname);
-
-        printf("(%d) Entrez le numéro : ", collection->current + 1);
-        scanf("%s", collection->contacts[i].number);
+        createSingleContact(collection);
 
         if (i != collection->size - 1) {
-            printf(GREEN "\n =================== \n" RESET);
+            printf(GREEN "\n===================\n" RESET);
         }
     }
 
     collection->current = 0;
-}
-
-void displaySingleContact(contact contact)
-{
-    printf("Id : %d \n", contact.id);
-    printf("Nom : %s \n", contact.name);
-    printf("Prenom : %s \n", contact.surname);
-    printf("Numéro : %s \n", contact.number);
+    printf(GREEN "Contacts ajoutés avec succès ! \n" RESET);
 }
 
 void readContact(Collection collection)
@@ -128,9 +145,42 @@ void readContact(Collection collection)
 
 void updateContact(Collection collection)
 {
+    char name[255];
+    int found;
+
     if (hasContact(collection, "modifier") == 1) {
         return;
     }
+
+    do
+    {
+        system("clear");
+        printf(YELLOW "Option : Modifier un contact \n" RESET);
+        printf("vous faites une recherche sur %d contacts\n\n", collection->size);
+
+        printf("Nom du contact à modifier : ");
+        scanf("%s", name);
+
+        found = 0;
+
+        for (int i = 0; i < collection->size; i++)
+        {
+            if (strcmp(name, collection->contacts[i].name) == 0) {
+                printf(GREEN "Contact trouvé \n" RESET);
+                displaySingleContact(collection->contacts[i]);
+                printf(GREEN "\n===================\n" RESET);
+                updateSingleContact(&collection->contacts[i]);
+                printf(GREEN "Contact modifié avec succès ! \n" RESET);
+                found++;
+            }
+        }
+
+        if (found == 0)
+        {
+            printf(RED "Aucun contact ne correspond à votre recherche (%s)!" RESET, name);
+        }
+    } while (recommencer("Voulez-vous relancer la rechercher ?") == 'O');
+    
 }
 
 void deleteContact(Collection collection)
@@ -159,11 +209,11 @@ void searchContact(Collection collection)
         scanf("%s", name);
 
         found = 0;
-        
+
         for (int i = 0; i < collection->size; i++)
         {
             if (strcmp(name, collection->contacts[i].name) == 0) {
-                printf(GREEN "contact trouvé \n" RESET);
+                printf(GREEN "Contact trouvé \n" RESET);
                 displaySingleContact(collection->contacts[i]);
                 found++;
             }
