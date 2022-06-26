@@ -96,6 +96,14 @@ void createContact(Collection collection)
     collection->current = 0;
 }
 
+void displaySingleContact(contact contact)
+{
+    printf("Id : %d \n", contact.id);
+    printf("Nom : %s \n", contact.name);
+    printf("Prenom : %s \n", contact.surname);
+    printf("Numéro : %s \n", contact.number);
+}
+
 void readContact(Collection collection)
 {
     if (hasContact(collection, "afficher") == 1) {
@@ -108,10 +116,7 @@ void readContact(Collection collection)
 
     for (int i = 0; i < collection->size; i++)
     {
-        printf("Id : %d \n", collection->contacts[i].id);
-        printf("Nom : %s \n", collection->contacts[i].name);
-        printf("Prenom : %s \n", collection->contacts[i].surname);
-        printf("Numéro : %s \n", collection->contacts[i].number);
+        displaySingleContact(collection->contacts[i]);
 
         if (i != collection->size - 1) {
             printf(GREEN "\n===================\n" RESET);
@@ -137,9 +142,38 @@ void deleteContact(Collection collection)
 
 void searchContact(Collection collection)
 {
+    char name[255];
+    int found;
+
     if (hasContact(collection, "rechercher") == 1) {
         return;
     }
+
+    do
+    {
+        system("clear");
+        printf(YELLOW "Option : Rechercher un contact \n" RESET);
+        printf("vous faites une recherche sur %d contacts\n\n", collection->size);
+
+        printf("Nom du contact recherché : ");
+        scanf("%s", name);
+
+        found = 0;
+        
+        for (int i = 0; i < collection->size; i++)
+        {
+            if (strcmp(name, collection->contacts[i].name) == 0) {
+                printf(GREEN "contact trouvé \n" RESET);
+                displaySingleContact(collection->contacts[i]);
+                found++;
+            }
+        }
+
+        if (found == 0)
+        {
+            printf(RED "Aucun contact ne correspond à votre recherche (%s)!" RESET, name);
+        }
+    } while (recommencer("Voulez-vous relancer la rechercher ?") == 'O');
 }
 
 void quit(Collection collection)
@@ -183,6 +217,6 @@ void main ()
                 break;
         }
 
-    } while (recommencer("voulez-vous effectuer une autre opération ?") == 'O');
+    } while (recommencer("Voulez-vous effectuer une autre opération ?") == 'O');
     quit(collection);
 }

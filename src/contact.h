@@ -23,6 +23,7 @@ Collection createCollection(int size);
 int hasContact(Collection collection, char message[]);
 void createContact(Collection collection);
 void readContact(Collection collection);
+void displaySingleContact(contact contact);
 void updateContact(Collection collection);
 void deleteContact(Collection collection);
 void searchContact(Collection collection);
